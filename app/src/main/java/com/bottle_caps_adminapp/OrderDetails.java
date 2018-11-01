@@ -41,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -54,6 +55,7 @@ import common.Common;
 import common.SlideButton;
 import common.TooltipWindow;
 import interfaces.WebApiResponseCallback;
+import model.LoginModel;
 import model.OrderCancelType;
 import model.OrderDetailsModel;
 import model.OrderModel;
@@ -167,7 +169,7 @@ LinearLayout updateRow;
     ArrayList<ProductDetails> productList=new ArrayList<>();
     BottomSheetDialog mBottomSheetDialog=null;
     int apiCall=-1;
-    int getOrderDetailsApiCall=1,updateStatusApiCall=2;
+    int getOrderDetailsApiCall=1,updateStatusApiCall=2,reLogin=3;
     public static OrderModel model=null;
     int index=0;
     ImageView icon;
@@ -240,11 +242,17 @@ LinearLayout updateRow;
     }
 
     public void  getOrderDetails() {
-        if (Util.isNetworkAvailable(OrderDetails.this)) {
-            apiCall=getOrderDetailsApiCall;
-            dialog = Util.showPogress(OrderDetails.this);
-            controller.getApicall().getData(Common.orderDetailsUrl, Util.getRequestString(Common.orderDetailsKeys, new String[]{selectedStore.getStoreId(), Integer.toString(controller.getLoginmodel().getUserId()), Util.getDeviceID(OrderDetails.this), "A", controller.getLoginmodel().getSessionId(), Integer.toString(model.getOrderId())}), this);
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (Util.isNetworkAvailable(OrderDetails.this)) {
+                    apiCall=getOrderDetailsApiCall;
+                    dialog = Util.showPogress(OrderDetails.this);
+                    controller.getApicall().getData(Common.orderDetailsUrl, Util.getRequestString(Common.orderDetailsKeys, new String[]{selectedStore.getStoreId(), Integer.toString(controller.getLoginmodel().getUserId()), Util.getDeviceID(OrderDetails.this), "A", controller.getLoginmodel().getSessionId(), Integer.toString(model.getOrderId())}), OrderDetails.this);
+                }
+            }
+        });
+
     }
 
     public void sendEmail(String email) {
@@ -581,7 +589,7 @@ LinearLayout updateRow;
                     }
                 });
 
-            } else {
+            } else if(apiCall==updateStatusApiCall) {
                 JSONObject jsonObject = Util.getJsonObject(value);
                 orderDetailsModel = new OrderDetailsModel(jsonObject);
                 runOnUiThread(new Runnable() {
@@ -592,19 +600,51 @@ LinearLayout updateRow;
                     }
                 });
 
+            }else if(apiCall==reLogin)
+            {
+                updateCredentials(value);
+                getOrderDetails();
             }
 
 
         }else{
             if (Util.getMessage(value).contains(Common.sessionExpireMessage)||Util.getMessage(value).equalsIgnoreCase("null")) {
-                controller.logout();
-                Util.Logout(OrderDetails.this);
+                if (dialog != null) {
+                    dialog.cancel();
+                }
+               reLogin();
             }
             Util.showToast(OrderDetails.this,Util.getMessage(value));
             if (dialog != null) {
                 dialog.cancel();
             }
         }
+    }
+    public void updateCredentials(String value)
+    {
+        final LoginModel model = new LoginModel(Util.getJsonObject(value));
+        controller.setLogin(true);
+        controller.setLoginmodel(model);
+        String selectedstore=controller.getPrefManager().getSelectedStore(Integer.toString(model.getUserId()));
+        if(selectedstore.length()>0)
+        {
+            Gson gson = new Gson();
+            StoreModel  selectedStore = gson.fromJson(selectedstore, StoreModel.class);
+            controller.setSelectedStore(selectedStore,Integer.toString(model.getUserId()));
+        }
+    }
+    public void reLogin() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (controller.getPrefManager().getRememberId().length() > 0) {
+                    apiCall = reLogin;
+                    dialog = Util.showPogress(OrderDetails.this);
+                    controller.getApicall().getData(Common.loginUrl, Util.getRequestString(Common.loginKeys, new String[]{"0", "0", controller.getPrefManager().getRememberId().toString(), controller.getPrefManager().getRememberPassword().toString(), Util.getDeviceID(OrderDetails.this), "A", ""}), OrderDetails.this);
+                }
+            }
+        });
+
     }
 
     @Override

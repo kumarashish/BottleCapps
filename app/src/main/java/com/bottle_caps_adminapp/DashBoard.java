@@ -53,6 +53,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -110,7 +112,7 @@ public class DashBoard extends AppCompatActivity implements NavigationView.OnNav
     boolean isApiCalled=false;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 int apiCall=0;
-    int searchItem=1,getList=2,addMore=3,applyFilter=4,updateStatus=5,swipeRefresh=6;
+    int searchItem=1,getList=2,addMore=3,applyFilter=4,updateStatus=5,swipeRefresh=6,reLogin=7;
     private DatePicker datePicker;
     private Calendar calendar;
   private int year, month, day;
@@ -136,6 +138,7 @@ int apiCall=0;
     common.Bold_TextView messageTv;
     RelativeLayout layout;
     SlideButton button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -301,7 +304,6 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
                     }
                 }
                // statusId = Integer.toString(model.getStatus().get(0));
-
             }
             search.setText("");
             controller.getApicall().getData(Common.orderListUrl, Util.getRequestString(Common.orderlistKeys, new String[]{selectedStore.getStoreId(), Integer.toString(controller.getLoginmodel().getUserId()), Util.getDeviceID(DashBoard.this), "A", controller.getLoginmodel().getSessionId(), Integer.toString(count), "50", Integer.toString(model.getType()), statusId, search.getText().toString(),model.getStartDate(),model.getEndDate()}), this);
@@ -703,7 +705,14 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
             public void run() {
                 if (Util.getStatus(value) == true) {
                     JSONObject jsonObject=null;
-                    if(apiCall==updateStatus)
+                    if(apiCall==reLogin)
+                    {
+
+                        updateCredentials(value);
+                      getList();
+
+                    }
+                    else if(apiCall==updateStatus)
                     {
                         int id = Util.getTargetStatusId(value);
                         OrderModel model = ordersList.get(selectedPosition);
@@ -789,9 +798,11 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
                         dialog.cancel();
                     }
                     if (Util.getMessage(value).contains(Common.sessionExpireMessage) || Util.getMessage(value).equalsIgnoreCase("null")) {
-                        controller.logout();
-                        Util.Logout(DashBoard.this);
 
+                        if (dialog != null) {
+                            dialog.cancel();
+                        }
+                        reLogin();
                     }
                     Util.showToast(DashBoard.this, Util.getMessage(value));
                     isApiCalled = false;
@@ -799,7 +810,19 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
             }
         });
     }
-
+    public void updateCredentials(String value)
+    {
+        final LoginModel model = new LoginModel(Util.getJsonObject(value));
+        controller.setLogin(true);
+        controller.setLoginmodel(model);
+        String selectedstore=controller.getPrefManager().getSelectedStore(Integer.toString(model.getUserId()));
+        if(selectedstore.length()>0)
+        {
+            Gson gson = new Gson();
+            StoreModel  selectedStore = gson.fromJson(selectedstore, StoreModel.class);
+            controller.setSelectedStore(selectedStore,Integer.toString(model.getUserId()));
+        }
+    }
 
     @Override
     public void onError(String value) {
@@ -974,7 +997,20 @@ Util.showToast(DashBoard.this,Util.getMessage(value));
             }
         }
     }
+    public void reLogin() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (controller.getPrefManager().getRememberId().length() > 0) {
+                    isApiCalled=true;
+                    apiCall = reLogin;
+                    dialog = Util.showPogress(DashBoard.this);
+                    controller.getApicall().getData(Common.loginUrl, Util.getRequestString(Common.loginKeys, new String[]{"0", "0", controller.getPrefManager().getRememberId().toString(), controller.getPrefManager().getRememberPassword().toString(), Util.getDeviceID(DashBoard.this), "A", ""}), DashBoard.this);
+                }
+            }
+        });
 
+    }
     public boolean isCheckBoxAlreadyAdded(int checkboxId) {
         boolean result = false;
         for (int i = 0; i < checkboxlist.size(); i++) {

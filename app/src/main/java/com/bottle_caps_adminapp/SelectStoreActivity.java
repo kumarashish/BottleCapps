@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 import adapters.StoreAdapter;
@@ -16,7 +18,9 @@ import butterknife.ButterKnife;
 import common.AppController;
 import common.TooltipWindow;
 import interfaces.OnStoreSelect;
+import model.LoginModel;
 import model.StoreModel;
+import utils.Util;
 
 /**
  * Created by Ashish.Kumar on 17-05-2018.
@@ -87,6 +91,8 @@ boolean isSwitchStoreRequested=false;
             finish();
         }
     }
+
+
 
     @Override
     public void onClick(View view) {
