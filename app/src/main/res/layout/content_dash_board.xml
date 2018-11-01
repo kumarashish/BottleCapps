@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.bottle_caps_adminapp.DashBoard"
+    tools:showIn="@layout/app_bar_dash_board">
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:id="@+id/header"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/ligt_grey_bg"
+            android:layout_width="match_parent"
+            android:layout_height="45dp">
+            <ImageView
+
+                android:src="@drawable/search_grey"
+                android:layout_width="30dp"
+               android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_height="30dp" />
+<EditText
+    android:id="@+id/search"
+    android:textColor="@color/black_color"
+    android:background="@color/lightgrey"
+    android:layout_gravity="center_vertical"
+    android:textSize="14dp"
+    android:gravity="left"
+    android:singleLine="true"
+    android:imeOptions="actionDone"
+    android:paddingLeft="5dp"
+    android:layout_marginRight="10dp"
+    android:textAllCaps="true"
+    android:textColorHint="@color/black_color"
+    android:hint="Search by Order#,E-Mail,or Phone#"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+<ImageView
+    android:id="@+id/filter"
+    android:layout_marginRight="10dp"
+    android:src="@drawable/filter_icon"
+    android:layout_centerVertical="true"
+    android:layout_alignParentRight="true"
+    android:layout_width="30dp"
+    android:layout_height="30dp" />
+    </RelativeLayout>
+
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swiperefresh"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="25dp"
+                android:layout_height="match_parent">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <ListView
+                    android:divider="@null"
+
+                    android:id="@+id/list_View"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    />
+                <RelativeLayout
+android:visibility="gone"
+                    android:id="@+id/noOrderLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/noOrderIcon"
+                            android:layout_gravity="center"
+                            android:src="@drawable/no_item"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp" />
+                        <common.Bold_TextView
+                            android:gravity="center"
+                            android:id="@+id/orderHeading"
+                            android:text="No Orders!"
+                            android:textColor="@color/black_color"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                        <common.DetailsCustomTextView
+                            android:textColor="@color/grey"
+                            android:id="@+id/no_order"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="5dp"
+                            android:gravity="center"
+                            android:text="You have not received any orders ,check back later"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </RelativeLayout>
+                </LinearLayout>
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
+
+        <include
+            layout="@layout/footer"
+            android:id="@+id/footer"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"/>
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

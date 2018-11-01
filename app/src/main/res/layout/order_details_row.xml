@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal"
+        android:weightSum="6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/productImage"
+                android:scaleType="fitXY"
+
+                android:layout_width="70dp"
+                android:layout_height="70dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:weightSum="2"
+            android:layout_weight="4"
+            android:layout_width="0dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_weight="1"
+                    android:weightSum="4"
+                    android:orientation="horizontal"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <common.DetailsCustomTextView
+                            android:maxLines="3"
+                            android:text="Lorem ipsum dolar sit amet"
+                            android:id="@+id/productName"
+                            android:textColor="@color/black_color"
+                            android:textSize="13dp"
+
+                            android:layout_width="wrap_content"
+
+                            android:layout_height="wrap_content" />
+
+
+
+                    </LinearLayout>
+                    <LinearLayout
+
+                        android:orientation="vertical"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+                        <common.Bold_TextView
+                            android:id="@+id/realPrice"
+                            android:text=" "
+                            android:paddingRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:textColor="@color/black_color"
+                            android:textSize="13dp"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+
+                            android:layout_height="wrap_content" />
+                        <RelativeLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <ImageView
+                                android:id="@+id/c_icon"
+                                android:visibility="gone"
+                            android:layout_marginRight="5dp"
+                                android:layout_centerVertical="true"
+                                android:layout_toLeftOf="@+id/discountPrice"
+                                android:src="@drawable/c_icon"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp" />
+                        <common.Bold_TextView
+
+                            android:text="$ 12.00 "
+                            android:paddingRight="5dp"
+                            android:layout_alignParentRight="true"
+                            android:gravity="end"
+                            android:textColor="@color/red"
+                            android:textSize="15dp"
+                            android:id="@+id/discountPrice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <common.DetailsCustomTextView
+                android:text="Quantity : 1"
+                android:id="@+id/quantity"
+                android:textColor="@color/red"
+                android:textSize="15dp"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content" />
+            <common.DetailsCustomTextView
+                android:text="SKU : 1234567890 | UPC : 789456123"
+                android:textColor="@color/black_color"
+                android:textSize="10dp"
+                android:layout_marginTop="5dp"
+                android:id="@+id/sku"
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+
+            android:background="@color/red"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="65dp">
+
+           <LinearLayout
+               android:background="@drawable/whitebox"
+               android:layout_marginLeft="20dp"
+               android:layout_marginRight="30dp"
+               android:layout_width="match_parent"
+               android:layout_marginTop="5dp"
+               android:layout_marginBottom="5dp"
+               android:layout_height="55dp">
+               <RelativeLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent">
+                   <LinearLayout
+                       android:layout_centerVertical="true"
+                       android:layout_marginRight="35dp"
+                       android:orientation="horizontal"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+               <ImageView
+
+                   android:src="@drawable/search_grey"
+                   android:layout_marginLeft="10dp"
+                   android:layout_gravity="center_vertical"
+                   android:layout_width="35dp"
+                   android:layout_height="35dp" />
+               <EditText
+
+                   android:id="@+id/search"
+                   android:paddingLeft="5dp"
+                   android:layout_gravity="center_vertical"
+                android:background="@android:color/transparent"
+                   android:hint="Type store name to search"
+                   android:textSize="20dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:singleLine="true"/>
+
+                   </LinearLayout>
+               <ImageView
+                   android:id="@+id/clear"
+                   android:src="@drawable/close_grey"
+                   android:layout_marginRight="10dp"
+                   android:layout_centerVertical="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_width="30dp"
+                   android:layout_height="30dp" />
+               </RelativeLayout>
+           </LinearLayout>
+        </RelativeLayout>
+        <ListView
+            android:visibility="gone"
+            android:id="@+id/list_View"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <common.DetailsCustomTextView
+            android:visibility="gone"
+            android:gravity="center"
+            android:text="No Result"
+            android:textSize="25dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+</LinearLayout>
+</LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="25dp"
+    android:background="@drawable/footer"
+    android:orientation="horizontal">
+    <LinearLayout
+
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <common.DetailsCustomTextView
+            android:layout_marginLeft="90sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+
+
+            android:textSize="10dp"
+            android:text="Powered by"
+
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-75dp"
+
+
+            android:layout_marginTop="2dp"
+            android:src="@drawable/footer_logo" />
+    </LinearLayout>
+</RelativeLayout>

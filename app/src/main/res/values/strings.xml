@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BC-Admin</string>
+    <string name="title_activity_dash_board">DashBoard</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+<string name="forgetpasswordhint">Enter your email address below and we will send<br/> you instruction for resetting it.</string>
+    <string name="action_settings">Settings</string>
+</resources>

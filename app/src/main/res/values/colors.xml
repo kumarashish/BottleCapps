@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ea0a2a</color>
+    <color name="colorPrimaryDark">#ea0a2a</color>
+    <color name="colorAccent">#ea0a2a</color>
+
+    <color name="black_color">#263238</color>
+    <color name="total">#191919</color>
+    <color name="heading_black_color">#263238</color>
+    <color name="black_color_add">#464646</color>
+    <color name="red">#ec1c24</color>
+    <color name="red_button_Color">#ec1c24</color>
+    <color name="grey_button_Color">#cbcbcb</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#0000ff</color>
+    <color name="lightgrey">#eceff1</color>
+    <color name="filterlinegrey">#eaeaea</color>
+    <color name="grey">#cbcbcb</color>
+    <color name="tooltip_bggrey">#ebebeb</color>
+    <color name="filterby">#5e5e5f</color>
+    <color name="skyblue">#00aeef</color>
+    <color name="yellow">#f8b416</color>
+
+    <color name="green">#39b54a</color>
+</resources>

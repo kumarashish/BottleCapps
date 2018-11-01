@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+
+<LinearLayout
+    android:layout_marginLeft="10dp"
+
+    android:background="@drawable/tooltip_bg"
+    android:orientation="vertical"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/club_saving_Layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <common.DetailsCustomTextView
+            android:id="@+id/club_saving_title"
+            android:padding="5dp"
+            android:text="Club Savings : "
+            android:textSize="16dp"
+            android:textColor="@color/black_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <common.DetailsCustomTextView
+            android:paddingLeft="7dp"
+            android:paddingTop="5dp"
+            android:layout_marginRight="7dp"
+android:id="@+id/club_saving"
+            android:gravity="end"
+            android:textSize="16dp"
+            android:textColor="@color/black_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+
+        android:id="@+id/sale_saving_Layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <common.DetailsCustomTextView
+            android:id="@+id/sale_saving_title"
+            android:textSize="16dp"
+            android:padding="5dp"
+            android:text="On-Sale Savings : "
+            android:textColor="@color/black_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <common.DetailsCustomTextView
+            android:paddingLeft="7dp"
+            android:paddingTop="5dp"
+            android:layout_marginRight="7dp"
+            android:id="@+id/sale_saving"
+            android:layout_gravity="left"
+            android:textSize="16dp"
+            android:gravity="end"
+            android:textColor="@color/black_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <LinearLayout
+
+        android:id="@+id/case_discount_Layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <common.DetailsCustomTextView
+            android:id="@+id/case_discount_title"
+            android:padding="5dp"
+            android:textSize="16dp"
+            android:text="Case Discount : "
+            android:textColor="@color/black_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <common.DetailsCustomTextView
+            android:paddingLeft="7dp"
+            android:paddingTop="5dp"
+            android:layout_marginRight="7dp"
+            android:textSize="16dp"
+            android:gravity="end"
+            android:id="@+id/case_discount"
+            android:textColor="@color/black_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>
+    <ImageView
+
+android:rotation="90"
+
+        android:id="@+id/tooltip_nav_up"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+
+        android:layout_marginLeft="-7dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/nav_up" />
+    </LinearLayout>

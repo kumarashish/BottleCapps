@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:background="@color/white"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="10dp"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="90dp">
+
+    <ImageView
+        android:id="@+id/storeImage"
+android:layout_marginLeft="5dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/img"
+        android:scaleType="fitCenter"
+        android:layout_width="120dp"
+        android:layout_height="120dp" />
+    <LinearLayout
+        android:layout_marginLeft="125dp"
+        android:layout_marginRight="50dp"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <common.Bold_TextView
+            android:id="@+id/storeName"
+            android:textSize="22dp"
+            android:textColor="@color/black_color"
+            android:paddingRight="5dp"
+            android:text="BottleCapps - Dallas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <common.DetailsCustomTextView
+            android:id="@+id/storeAddress"
+            android:paddingRight="5dp"
+            android:layout_marginTop="5dp"
+            android:text="300 e royla ln,Irving Tx 75039 "
+            android:textSize="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <ImageView
+android:id="@+id/selectedStore"
+        android:visibility="gone"
+    android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+    android:layout_marginLeft="5dp"
+    android:src="@drawable/selected"
+    android:layout_width="80dp"
+    android:layout_height="80dp" />
+    <View android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"/>
+</RelativeLayout>
+</LinearLayout>
