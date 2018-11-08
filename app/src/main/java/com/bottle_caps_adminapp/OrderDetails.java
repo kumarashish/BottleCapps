@@ -601,7 +601,7 @@ LinearLayout updateRow;
                 });
 
             }else if(apiCall==reLogin)
-            {
+            { Util.showToast(OrderDetails.this,"Refreshing authentication token..");
                 updateCredentials(value);
                 getOrderDetails();
             }

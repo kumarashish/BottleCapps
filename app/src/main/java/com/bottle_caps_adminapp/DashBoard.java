@@ -707,9 +707,9 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
                     JSONObject jsonObject=null;
                     if(apiCall==reLogin)
                     {
-
+                        Util.showToast(DashBoard.this,"Refreshing authentication token..");
                         updateCredentials(value);
-                      getList();
+                        getList();
 
                     }
                     else if(apiCall==updateStatus)
