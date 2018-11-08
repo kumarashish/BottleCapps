@@ -589,7 +589,7 @@ LinearLayout updateRow;
                     }
                 });
 
-            } else if(apiCall==updateStatusApiCall) {
+            } else if(apiCall==getOrderDetailsApiCall) {
                 JSONObject jsonObject = Util.getJsonObject(value);
                 orderDetailsModel = new OrderDetailsModel(jsonObject);
                 runOnUiThread(new Runnable() {
