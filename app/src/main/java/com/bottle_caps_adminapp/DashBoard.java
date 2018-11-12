@@ -327,7 +327,7 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
                 }
                 dialog = Util.showPogress(DashBoard.this);
             }
-           String statusId = "0";
+           String statusId = "0" ;
             if (model == null) {
                 model = new SettingsModel();
             }
