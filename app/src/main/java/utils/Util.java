@@ -237,6 +237,11 @@ public class Util {
         deviceId = Settings.Secure.getString(act.getContentResolver(), Settings.Secure.ANDROID_ID);
         return deviceId;
     }
+    public static String getDeviceID(Context act) {
+        String deviceId = "";
+        deviceId = Settings.Secure.getString(act.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return deviceId;
+    }
 
     public static boolean getStatus(String data) {
         boolean status = false;

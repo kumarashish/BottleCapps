@@ -247,6 +247,10 @@ LinearLayout updateRow;
             public void run() {
                 if (Util.isNetworkAvailable(OrderDetails.this)) {
                     apiCall=getOrderDetailsApiCall;
+                    if(dialog!=null)
+                    {
+                        dialog.cancel();
+                    }
                     dialog = Util.showPogress(OrderDetails.this);
                     controller.getApicall().getData(Common.orderDetailsUrl, Util.getRequestString(Common.orderDetailsKeys, new String[]{selectedStore.getStoreId(), Integer.toString(controller.getLoginmodel().getUserId()), Util.getDeviceID(OrderDetails.this), "A", controller.getLoginmodel().getSessionId(), Integer.toString(model.getOrderId())}), OrderDetails.this);
                 }
@@ -640,6 +644,7 @@ LinearLayout updateRow;
                 if (controller.getPrefManager().getRememberId().length() > 0) {
                     apiCall = reLogin;
                     dialog = Util.showPogress(OrderDetails.this);
+                    Util.showToast(OrderDetails.this, "Refreshing session token...");
                     controller.getApicall().getData(Common.loginUrl, Util.getRequestString(Common.loginKeys, new String[]{"0", "0", controller.getPrefManager().getRememberId().toString(), controller.getPrefManager().getRememberPassword().toString(), Util.getDeviceID(OrderDetails.this), "A", ""}), OrderDetails.this);
                 }
             }

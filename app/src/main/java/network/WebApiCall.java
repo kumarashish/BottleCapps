@@ -105,6 +105,42 @@ public void getData(String url,String content ,final WebApiResponseCallback call
         }
     });
 }
+    public String  getData(String url,String content )
+    {
+        client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = RequestBody.create(mediaType, content);
+//    RequestBody requestBody = new MultipartBody.Builder()
+//            .setType(MultipartBody.FORM)
+//            .addFormDataPart("UserId", "0")
+//            .addFormDataPart("UserEmail", "10002@bottlecapps.com")
+//            .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .addHeader("content-type", "application/x-www-form-urlencoded")
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            if (response.code() == 200) {
+                return response.body().string();
+
+            } else {
+                return getErrorData();
+            }
+
+        } catch (Exception ex) {
+            ex.fillInStackTrace();
+            return getErrorData();
+        }
+    }
+
     public String getData(String url) {
         OkHttpClient client = new OkHttpClient();
         client.newBuilder().connectTimeout(60000, TimeUnit.MILLISECONDS).readTimeout(60000, TimeUnit.MILLISECONDS).build();

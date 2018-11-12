@@ -1,29 +1,17 @@
 package com.bottle_caps_adminapp;
-import android.app.ActionBar;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.ClipData;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -35,7 +23,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
@@ -51,7 +38,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -73,6 +59,8 @@ import model.LoginModel;
 import model.OrderModel;
 import model.SettingsModel;
 import model.StoreModel;
+import service.MyService;
+import service.MyReceiver;
 import utils.Util;
 
 
@@ -102,30 +90,29 @@ public class DashBoard extends AppCompatActivity implements NavigationView.OnNav
     View contentDashboard;
     ListView orderList;
     EditText search;
-    ArrayList<OrderModel> ordersList=new ArrayList<>();
+    public static ArrayList<OrderModel> ordersList=new ArrayList<>();
     Dialog dialog;
     StoreModel selectedStore=null;
     int count=1;
     ArrayList<CheckBox> checkboxlist=new ArrayList<>();
-    SettingsModel model;
-    OrderAdapter adapter=null;
+    public static SettingsModel model;
+    public static  OrderAdapter adapter=null;
     boolean isApiCalled=false;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
-int apiCall=0;
+    int apiCall=0;
     int searchItem=1,getList=2,addMore=3,applyFilter=4,updateStatus=5,swipeRefresh=6,reLogin=7;
     private DatePicker datePicker;
     private Calendar calendar;
-  private int year, month, day;
+    private int year, month, day;
     private int year1, month1, day1;
     int datetype=1;
     int totalorderCount=0;
-     common.DetailsCustomTextView startDateVale ;
-   common.DetailsCustomTextView endDateVale;
-   int selectedPosition=-1;
-   BottomSheetDialog mBottomSheetDialog=null;
+    common.DetailsCustomTextView startDateVale ;
+    common.DetailsCustomTextView endDateVale;
+    int selectedPosition=-1;
+    BottomSheetDialog mBottomSheetDialog=null;
     private SwipeRefreshLayout swipeRefreshLayout;
     String message="";
-
     common.DetailsCustomTextView heading;
     LinearLayout multiView;
     LinearLayout singleView;
@@ -138,7 +125,10 @@ int apiCall=0;
     common.Bold_TextView messageTv;
     RelativeLayout layout;
     SlideButton button;
-
+    public static final String FILTER_ACTION_KEY = "any_key";
+    MyReceiver myReceiver;
+    Intent intentService;
+    boolean isServiceRunning=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +136,7 @@ int apiCall=0;
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         initializeAll();
     }
+
     @Override
     protected Dialog onCreateDialog(int id) {
         // TODO Auto-generated method stub
@@ -192,6 +183,34 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
         }
 
     }
+
+    public void startService() {
+
+        if (isServiceRunning != true) {
+            intentService = new Intent(DashBoard.this, MyService.class);
+            intentService.putExtra("message", message);
+            startService(intentService);
+            isServiceRunning = true;
+        }
+    }
+    @Override
+    protected void onResume() {
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (isServiceRunning) {
+            stopService(intentService);
+        }
+        if (myReceiver != null) {
+
+            unregisterReceiver(myReceiver);
+        }
+        super.onDestroy();
+    }
+
     public void initializeAll()
     {
         ButterKnife.bind(this);
@@ -284,11 +303,28 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
         month1= calendar.get(Calendar.MONTH);
         day1=calendar.get(Calendar.DAY_OF_MONTH);
     }
+    @Override
+    protected void onStart() {
+       registerReceiver(myReceiver);
+        super.onStart();
+    }
+
+    private void registerReceiver(MyReceiver myReceiver) {
+        myReceiver = new MyReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FILTER_ACTION_KEY);
+        LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver, intentFilter);
+    }
+
+
 
     public void getList() {
         selectedStore = controller.getSelectedStore();
         if (Util.isNetworkAvailable(DashBoard.this)) {
             if(apiCall!=swipeRefresh) {
+                if (dialog != null) {
+                    dialog.cancel();
+                }
                 dialog = Util.showPogress(DashBoard.this);
             }
            String statusId = "0";
@@ -707,105 +743,106 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
                     JSONObject jsonObject=null;
                     if(apiCall==reLogin)
                     {
-                        Util.showToast(DashBoard.this,"Refreshing authentication token..");
                         updateCredentials(value);
+                        apiCall=getList;
                         getList();
-
-                    }
-                    else if(apiCall==updateStatus)
-                    {
-                        int id = Util.getTargetStatusId(value);
-                        OrderModel model = ordersList.get(selectedPosition);
-                        model.setOrderStatusId(id);
-                        model.setOrderStatus(Util.getOrderStatusString(selectedStore,model.getOrderTypeId(), id));
-                        model.setMessage(Util.getMessage(value));
-                        ordersList.set(selectedPosition, model);
-                        //Util.showToast(DashBoard.this, Util.getMessage(value));
-                        showdonePopUp(model.getMessage());
                     }else {
-                        jsonObject = Util.getJsonObject(value);
+                            if (apiCall == updateStatus) {
+                            int id = Util.getTargetStatusId(value);
+                            OrderModel model = ordersList.get(selectedPosition);
+                            model.setOrderStatusId(id);
+                            model.setOrderStatus(Util.getOrderStatusString(selectedStore, model.getOrderTypeId(), id));
+                            model.setMessage(Util.getMessage(value));
+                            ordersList.set(selectedPosition, model);
+                            //Util.showToast(DashBoard.this, Util.getMessage(value));
+                            showdonePopUp(model.getMessage());
+                        } else {
+                            jsonObject = Util.getJsonObject(value);
 
-                        if (count == 1) {
-                            ordersList.clear();
-                        }
-                        try {
-                            totalorderCount = jsonObject.getInt("TotalOrders");
-                            JSONArray orders = jsonObject.getJSONArray("Orders");
-
-                            if ((apiCall == searchItem) || (apiCall == getList)||(apiCall==swipeRefresh)) {
+                            if (count == 1) {
                                 ordersList.clear();
                             }
-                            for (int i = 0; i < orders.length(); i++) {
-                                OrderModel model = new OrderModel(orders.getJSONObject(i));
-                                ordersList.add(model);
+                            try {
+                                totalorderCount = jsonObject.getInt("TotalOrders");
+                                JSONArray orders = jsonObject.getJSONArray("Orders");
+
+                                if ((apiCall == searchItem) || (apiCall == getList) || (apiCall == swipeRefresh)) {
+                                    ordersList.clear();
+                                }
+                                for (int i = 0; i < orders.length(); i++) {
+                                    OrderModel model = new OrderModel(orders.getJSONObject(i));
+                                    ordersList.add(model);
+                                }
+
+                            } catch (Exception ex) {
+                                ex.fillInStackTrace();
+                            }
+                        }
+                        if (ordersList.size() > 0) {
+
+                            if (adapter != null) {
+                                adapter.notifyDataSetChanged();
+
+                            } else {
+                                adapter = new OrderAdapter(DashBoard.this, ordersList);
+                                orderList.setAdapter(adapter);
                             }
 
-                        } catch (Exception ex) {
-                            ex.fillInStackTrace();
-                        }
-                    }
-                    if (ordersList.size() > 0) {
-
-                        if (adapter != null) {
-                            adapter.notifyDataSetChanged();
-
+                            if (dialog != null) {
+                                dialog.cancel();
+                            }
+                            if (apiCall == swipeRefresh) {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
+                            orderList.setVisibility(View.VISIBLE);
+                            noOrderLayout.setVisibility(View.GONE);
+                            isApiCalled = false;
+                            startService();
                         } else {
-                            adapter = new OrderAdapter(DashBoard.this, ordersList);
-                            orderList.setAdapter(adapter);
-                        }
 
-                        if (dialog != null) {
-                            dialog.cancel();
-                        }
-                        if(apiCall==swipeRefresh)
-                        {
-                            swipeRefreshLayout.setRefreshing(false);
-                        }
-                        orderList.setVisibility(View.VISIBLE);
-                        noOrderLayout.setVisibility(View.GONE);
-                        isApiCalled = false;
-                    } else {
-
-                        if ((apiCall == getList)) {
-                            no_order.setText("You have not received any order.");
-                            noOrderIcon.setImageResource(R.drawable.no_orders);
-                            orderHeading.setText("No Orders!");
-                        } else if (apiCall == searchItem) {
-                            noOrderIcon.setImageResource(R.drawable.no_results);
-                            no_order.setText("Sorry, there are no result for this search,Please try another phrase.");
-                            orderHeading.setText("No Results!");
-                        } else if(apiCall==applyFilter){
-                            no_order.setText("Sorry, no result found with selected filters.");
-                            noOrderIcon.setImageResource(R.drawable.no_results);
-                            orderHeading.setText("No Results!");
-                        }
-                        orderList.setVisibility(View.GONE);
-                        noOrderLayout.setVisibility(View.VISIBLE);
-                        if (dialog != null) {
-                            dialog.cancel();
-                        }
-                        if(apiCall==swipeRefresh)
-                        {
-                            swipeRefreshLayout.setRefreshing(false);
+                            if (apiCall == getList) {
+                                no_order.setText("You have not received any order.");
+                                noOrderIcon.setImageResource(R.drawable.no_orders);
+                                orderHeading.setText("No Orders!");
+                            } else if (apiCall == searchItem) {
+                                noOrderIcon.setImageResource(R.drawable.no_results);
+                                no_order.setText("Sorry, there are no result for this search,Please try another phrase.");
+                                orderHeading.setText("No Results!");
+                            } else if (apiCall == applyFilter) {
+                                no_order.setText("Sorry, no result found with selected filters.");
+                                noOrderIcon.setImageResource(R.drawable.no_results);
+                                orderHeading.setText("No Results!");
+                            }
+                            orderList.setVisibility(View.GONE);
+                            noOrderLayout.setVisibility(View.VISIBLE);
+                            if (dialog != null) {
+                                dialog.cancel();
+                            }
+                            if (apiCall == swipeRefresh) {
+                                swipeRefreshLayout.setRefreshing(false);
+                            }
                         }
                     }
                 } else {
                     if(apiCall==swipeRefresh)
                     {
                         swipeRefreshLayout.setRefreshing(false);
+                        Util.showToast(DashBoard.this, Util.getMessage(value));
+                        isApiCalled = false;
+                        if (dialog != null) {
+                            dialog.cancel();
+                        }
                     }
-                    if (dialog != null) {
-                        dialog.cancel();
-                    }
-                    if (Util.getMessage(value).contains(Common.sessionExpireMessage) || Util.getMessage(value).equalsIgnoreCase("null")) {
 
+                    if (Util.getMessage(value).contains(Common.sessionExpireMessage) || Util.getMessage(value).equalsIgnoreCase("null")) {
                         if (dialog != null) {
                             dialog.cancel();
                         }
                         reLogin();
                     }
-                    Util.showToast(DashBoard.this, Util.getMessage(value));
-                    isApiCalled = false;
+
+
+
                 }
             }
         });
@@ -1005,6 +1042,7 @@ Util.showToast(DashBoard.this,Util.getMessage(value));
                     isApiCalled=true;
                     apiCall = reLogin;
                     dialog = Util.showPogress(DashBoard.this);
+                    Util.showToast(DashBoard.this, "Refreshing session token...");
                     controller.getApicall().getData(Common.loginUrl, Util.getRequestString(Common.loginKeys, new String[]{"0", "0", controller.getPrefManager().getRememberId().toString(), controller.getPrefManager().getRememberPassword().toString(), Util.getDeviceID(DashBoard.this), "A", ""}), DashBoard.this);
                 }
             }
@@ -1029,4 +1067,5 @@ Util.showToast(DashBoard.this,Util.getMessage(value));
             getList();
 
     }
+
 }
