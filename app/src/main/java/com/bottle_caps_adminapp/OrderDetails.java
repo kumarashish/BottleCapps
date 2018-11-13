@@ -617,8 +617,10 @@ LinearLayout updateRow;
                     dialog.cancel();
                 }
                reLogin();
+            }else{
+                Util.showToast(OrderDetails.this,Util.getMessage(value));
             }
-            Util.showToast(OrderDetails.this,Util.getMessage(value));
+
             if (dialog != null) {
                 dialog.cancel();
             }

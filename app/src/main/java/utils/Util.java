@@ -69,6 +69,17 @@ public class Util {
             return false;
         }
     }
+    public static boolean isNetworkAvailable(Context act) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) act.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if ((activeNetworkInfo != null) && (activeNetworkInfo.isConnected())) {
+            return true;
+        } else {
+            Toast.makeText(act, "Internet Unavailable", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
     public static String getDefaultStartDate() {
         Calendar c = Calendar.getInstance();
@@ -499,5 +510,15 @@ public class Util {
         } else {
             return false;
         }
+    }
+
+    public static int getOrderCount(String response) {
+        try {
+            JSONObject jsonObject = Util.getJsonObject(response);
+            return jsonObject.isNull("TotalOrders")?0:jsonObject.getInt("TotalOrders");
+        } catch (Exception ex) {
+            ex.fillInStackTrace();
+        }
+        return 0;
     }
 }

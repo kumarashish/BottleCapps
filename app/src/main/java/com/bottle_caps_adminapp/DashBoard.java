@@ -106,7 +106,7 @@ public class DashBoard extends AppCompatActivity implements NavigationView.OnNav
     private int year, month, day;
     private int year1, month1, day1;
     int datetype=1;
-    int totalorderCount=0;
+    public static int totalorderCount=0;
     common.DetailsCustomTextView startDateVale ;
     common.DetailsCustomTextView endDateVale;
     int selectedPosition=-1;
@@ -765,7 +765,6 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
                             try {
                                 totalorderCount = jsonObject.getInt("TotalOrders");
                                 JSONArray orders = jsonObject.getJSONArray("Orders");
-
                                 if ((apiCall == searchItem) || (apiCall == getList) || (apiCall == swipeRefresh)) {
                                     ordersList.clear();
                                 }
