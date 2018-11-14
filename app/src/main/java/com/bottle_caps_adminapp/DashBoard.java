@@ -88,7 +88,7 @@ public class DashBoard extends AppCompatActivity implements NavigationView.OnNav
     ImageView  noOrderIcon;
     ImageView filter;
     View contentDashboard;
-    ListView orderList;
+    public  static ListView orderList;
     EditText search;
     public static ArrayList<OrderModel> ordersList=new ArrayList<>();
     Dialog dialog;
@@ -837,7 +837,13 @@ dialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (1000 * 60 * 60 *
                         if (dialog != null) {
                             dialog.cancel();
                         }
-                        reLogin();
+                        if(controller.getPrefManager().getRememberId().length()>0) {
+                            reLogin();
+                        }else{
+                            controller.logout();
+                            Util.Logout(DashBoard.this);
+                            Util.showToast(DashBoard.this, Util.getMessage(value));
+                        }
                     }
 
 
@@ -1041,7 +1047,7 @@ Util.showToast(DashBoard.this,Util.getMessage(value));
                     isApiCalled=true;
                     apiCall = reLogin;
                     dialog = Util.showPogress(DashBoard.this);
-                    Util.showToast(DashBoard.this, "Refreshing session token...");
+                    Util.showToast(DashBoard.this, "Refresh");
                     controller.getApicall().getData(Common.loginUrl, Util.getRequestString(Common.loginKeys, new String[]{"0", "0", controller.getPrefManager().getRememberId().toString(), controller.getPrefManager().getRememberPassword().toString(), Util.getDeviceID(DashBoard.this), "A", ""}), DashBoard.this);
                 }
             }

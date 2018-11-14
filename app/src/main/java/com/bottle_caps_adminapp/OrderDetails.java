@@ -605,7 +605,7 @@ LinearLayout updateRow;
                 });
 
             }else if(apiCall==reLogin)
-            { Util.showToast(OrderDetails.this,"Refreshing authentication token..");
+            { Util.showToast(OrderDetails.this,"Refresh");
                 updateCredentials(value);
                 getOrderDetails();
             }
@@ -616,7 +616,13 @@ LinearLayout updateRow;
                 if (dialog != null) {
                     dialog.cancel();
                 }
-               reLogin();
+                if(controller.getPrefManager().getRememberId().length()>0) {
+                    reLogin();
+                }else{
+                    controller.logout();
+                    Util.Logout(OrderDetails.this);
+                    Util.showToast(OrderDetails.this, Util.getMessage(value));
+                }
             }else{
                 Util.showToast(OrderDetails.this,Util.getMessage(value));
             }

@@ -32,7 +32,7 @@ import utils.Util;
 
 public class MyService extends Service {
    Intent in;
-    public static final int notify = 180000;  //interval between two services(Here Service run every 3 Minute)
+    public static final int notify = 120000;  //interval between two services(Here Service run every 3 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;
     //timer handling
@@ -83,7 +83,7 @@ public class MyService extends Service {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            if (isSessionExpired) {
+                            if( (isSessionExpired)&&(controller.getPrefManager().getRememberId().length()>0)) {
                                 String response = controller.getApicall().getData(Common.loginUrl, Util.getRequestString(Common.loginKeys, new String[]{"0", "0", controller.getPrefManager().getRememberId().toString(), controller.getPrefManager().getRememberPassword().toString(), Util.getDeviceID(getApplicationContext()), "A", ""}));
                                 if (Util.getStatus(response) == true) {
                                     final LoginModel model = new LoginModel(Util.getJsonObject(response));

@@ -44,6 +44,7 @@ public class MyReceiver extends BroadcastReceiver {
                 }
                 int difference = orderCount - DashBoard.totalorderCount;
                 Toast.makeText(context, "You have " + difference + " new orders", Toast.LENGTH_SHORT).show();
+                DashBoard.orderList.smoothScrollToPosition(0);
             }
         }else if (Util.getMessage(response).contains(Common.sessionExpireMessage) || Util.getMessage(response).equalsIgnoreCase("null")){
             MyService.isSessionExpired=true;
